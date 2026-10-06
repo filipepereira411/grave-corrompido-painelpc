@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Painel de Controlo de Dispositivos e Ecrã</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <hta:application 
+        id="oHTA"
+        applicationname="PainelDispositivosHTA"
+        border="thick"
+        caption="yes"
+        maximizebutton="no"
+        minimizebutton="yes"
+        scroll="no"
+        singleinstance="yes"
+        windowstate="normal"
+    />
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2e;
+            color: #cdd6f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 550px;
+            margin: 0 auto;
+            background: #252538;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 20px;
+            color: #89b4fa;
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #45475a;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #313244;
+            border-radius: 6px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #a6e3a1;
+            display: block;
+        }
+        .btn {
+            background-color: #45475a;
+            color: #cdd6f4;
+            border: none;
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .btn:hover {
+            background-color: #585b70;
+        }
+        .btn-primary {
+            background-color: #89b4fa;
+            color: #11111b;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #b4befe;
+        }
+        .btn-danger {
+            background-color: #f38ba8;
+            color: #11111b;
+            font-weight: bold;
+        }
+        .btn-danger:hover {
+            background-color: #eba0ac;
+        }
+        .status {
+            font-size: 12px;
+            color: #cdd6f4;
+            background: #11111b;
+            padding: 10px;
+            border-radius: 4px;
+            height: 60px;
+            overflow-y: auto;
+            font-family: Consolas, monospace;
+        }
+    </style>
+
+    <script language="javascript" type="text/javascript">
+        // Redimensionar a janela ao iniciar
+        window.onload = function() {
+            window.resizeTo(600, 650);
+        }
+
+        // Criar o objeto WScript.Shell para executar comandos do sistema
+        var shell = new ActiveXObject("WScript.Shell");
+
+        function log(mensagem) {
+            document.getElementById("statusBox").innerHTML = "> " + mensagem;
+        }
+
+        // --- FUNÇÕES DE DISPOSITIVOS ---
+        function gerirDispositivos() {
+            log("A abrir o Gestor de Dispositivos...");
+            shell.Run("devmgmt.msc");
+        }
+
+        function abrirSom() {
+            log("A abrir as definições de som e áudio...");
+            shell.Run("control mmsys.cpl sounds");
+        }
+
+        function ejectarUSB() {
+            log("A abrir assistente para remover Hardware em segurança...");
+            shell.Run("rundll32.exe shell32.dll,Control_RunDLL hotplug.dll");
+        }
+
+        // --- FUNÇÕES DE GRAVAÇÃO E CAPTURA ---
+        function abrirGravadorWindows() {
+            log("A abrir a Xbox Game Bar (atalho nativo para gravação: Win + Alt + R)...");
+            shell.Run("cmd /c start xboxwindowsegb://");
+        }
+
+        function capturarEcra() {
+            log("A abrir a Ferramenta de Recorte do Windows...");
+            shell.Run("snippingtool.exe");
+        }
+
+        function passosGravador() {
+            log("A abrir o Gravador de Passos do Windows (PSR)...");
+            shell.Run("psr.exe");
+        }
+
+        // --- OUTRAS FERRAMENTAS ---
+        function abrirPrompt() {
+            log("A abrir Linha de Comandos (CMD)...");
+            shell.Run("cmd.exe");
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Painel de Controlo HTA</h1>
+        
+        <!-- Secção de Dispositivos -->
+        <div class="section">
+            <span class="section-title">🔌 Controlo de Dispositivos e Som</span>
+            <button class="btn" onclick="gerirDispositivos()">Gestor de Dispositivos</button>
+            <button class="btn" onclick="abrirSom()">Definições de Áudio</button>
+            <button class="btn" onclick="ejectarUSB()">Ejetar USB / Hardware</button>
+        </div>
+
+        <!-- Secção de Multimédia / Ecrã -->
+        <div class="section">
+            <span class="section-title">🎥 Gravação e Captura de Ecrã</span>
+            <button class="btn btn-primary" onclick="abrirGravadorWindows()">Abrir Barra de Gravação (Xbox)</button>
+            <button class="btn" onclick="capturarEcra()">Captura de Ecrã (Print)</button>
+            <button class="btn" onclick="passosGravador()">Gravar Passos do Problema</button>
+        </div>
+
+        <!-- Secção do Sistema -->
+        <div class="section">
+            <span class="section-title">💻 Utilitários do Sistema</span>
+            <button class="btn" onclick="abrirPrompt()">Abrir CMD</button>
+        </div>
+
+        <!-- Consola de Status -->
+        <div class="section">
+            <span class="section-title">📝 Estado do Sistema</span>
+            <div id="statusBox" class="status">> Aguardando comando...</div>
+        </div>
+    </div>
+
+</body>
+</html>
